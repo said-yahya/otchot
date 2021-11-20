@@ -7,5 +7,5 @@ urlpatterns = [
     path('new/', new, name='new'),
     path('reports/', reports, name='reports'),
     path('detail/<int:id>/', detail, name='detail'),
-    path('add/zagolovok/', add_zagolovok, name='zagolovok')
+    path('add/zagolovok/<int:id>', add_zagolovok, name='zagolovok')
 ]

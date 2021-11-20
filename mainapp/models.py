@@ -44,11 +44,17 @@ class Zagolovok(models.Model):
 
     title = models.CharField(max_length=255)
     otdel = models.ForeignKey(Otdel, on_delete=models.CASCADE)
-    text = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class Description(models.Model):
+
+    text = models.TextField()
+    zagolovok = models.ForeignKey(Zagolovok, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
 
 
 class Images(models.Model):

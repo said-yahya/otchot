@@ -38,7 +38,7 @@ def get_otdels(id):
         cursor.execute(f"""
             select * from mainapp_otdel
             where otchot_id='{id}'
-            order by created_date DESC  
+            order by created_date ASC  
         """)
         data = dictfetchall(cursor)
     return data

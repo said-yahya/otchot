@@ -8,8 +8,7 @@
 <h1>{{ otchot.name }}</h1>
 <ol>
     {% for otdel in otdels %}
-        <h2>{{ otdel.title }}</h2>
-        <a href="#">{{ zagolovok_form }}</a>
+    <a href="{% url 'zagolovok' otdel.id %}" style="text-decoration: none;"><h2>{{ otdel.title }}</h2></a>
     {% endfor %}
 </ol>
 <h3></h3>

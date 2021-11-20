@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import OtchotForm, OtdelForm, ZagolovokForm
-from .models import Otchot
+from .models import Otchot, Otdel, Zagolovok, Description, Images
 from .services import get_otchot, get_otchot_all, get_otdels
 # Create your views here.
 
@@ -52,8 +52,28 @@ def detail(request, id):
     return render(request, 'detail.html', ctx)
 
 
-def add_zagolovok(request):
+def add_zagolovok(request, id):
+    if request.POST:
+        data = request.POST
+        print('#######', data)
+        images = request.FILES.getlist('images')
+        if data['title'] != '':
+            zagolovok, created = Zagolovok.objects.get_or_create(
+                title=data['title'],
+                otdel_id=id)
+
+        if images:
+            for image in images:
+                image = Images.objects.create(
+                    image=image,
+                    zagolovok=zagolovok)
+
+        if data['description'] != '':
+            description = Description.objects.create(
+                text=data['description'],
+                zagolovok=zagolovok)
+
     ctx = {
 
     }
-    return render(request, 'detail.html', ctx)
+    return render(request, 'zagolovok.html', ctx)
