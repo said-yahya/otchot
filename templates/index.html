@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчеты</title>
+    <link rel="stylesheet" href="{% static 'css/index_stile.css' %}">
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'reports' %}"><button class="button">Существующие отчеты</button></a>
+        <a href="{% url 'new' %}"><button class="button_2">Создать новый отчет</button></a>
+    </div>
+</body>
+</html>

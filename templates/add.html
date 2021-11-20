@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый отчет</title>
+</head>
+<body>
+<h2>Создать новый отчет</h2>
+    <form action="{% url 'reports' %}" method="post">
+        {% csrf_token %}
+        {{ new_otchot }}
+        <input type="submit" value="Сохранить">
+    </form>
+</body>
+</html>

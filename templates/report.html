@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Существующие отчеты</title>
+</head>
+<body>
+<ul>
+    {% for otchot in otchoti %}
+            <li>
+                <a href="{% url 'detail' otchot.id %}" style="text-decoration: none;font-size:20px">{{ otchot.name }}</a>
+
+            </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
