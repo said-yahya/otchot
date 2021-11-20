@@ -1,0 +1,3 @@
+#### DATABASE setting
+-----  CREATE USER "otchot_user" WITH PASSWORD 'otchot_root';
+-----  CREATE DATABASE "otchot_db" OWNER 'otchot_user';
