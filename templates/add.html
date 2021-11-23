@@ -2,14 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Новый отчет</title>
+    <title>Мои отчеты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 <body>
 <h2>Создать новый отчет</h2>
-    <form action="{% url 'reports' %}" method="post">
-        {% csrf_token %}
-        {{ new_otchot }}
-        <input type="submit" value="Сохранить">
-    </form>
+<form method='POST' enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group m-3">
+        <label>Название отчета</label>
+        <input required name="otchot_name" type="text" placeholder="Введите название" class="form-control">
+    </div>
+    <button type='submit' class="btn btn-primary m-3">Сохранить</button>
+</form>
 </body>
 </html>

@@ -2,20 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Мои отчеты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        .title{
+            color:black;
+            font-size: 40px;
+            text-align:center;
+       }
+    </style>
 </head>
 <body>
-<h1>{{ otchot.name }}</h1>
-<ol>
+<h1 class="title">{{ otchot.name }}</h1>
+
+<ol type="1">
     {% for otdel in otdels %}
-    <a href="{% url 'zagolovok' otdel.id %}" style="text-decoration: none;"><h2>{{ otdel.title }}</h2></a>
+        <li>
+            <h4>{{ otdel.title }}</h4>
+        </li>
+       <form method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group m-3">
+                <label>Добавить заголовок</label><br>
+                <input type="text" name="zag_title"><br>
+                <label>Текст</label><br>
+                <textarea class="form-control" name="description"></textarea>
+            </div>
+           <input type="submit" value="Сохранить">
+        </form>
     {% endfor %}
 </ol>
 <h3></h3>
-<form method="post">
+<form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
-    {{ otdel_form }}
-    <input type="submit" value="Добавить отдел">
+    <div class="form-group m-3">
+        <label>Добавить отдел</label>
+        <input required name="otdel_title" type="text" placeholder="Название отдела" class="form-control">
+    </div>
+    <button type='submit' class="btn btn-primary m-3">Сохранить</button>
 </form>
 </body>
 </html>
