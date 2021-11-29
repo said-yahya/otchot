@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Вы можете изменить название Отдела</h1>
+<form action="#" method="post">
+    {% csrf_token %}
+    <label>Название отдела:</label>
+    <textarea  name="otdel_title" rows="1">
+        {{ otdel.title }}
+      </textarea>
+      <br><br>
+      <input type="submit" value="Изменить">
+</form>
+<a href="{% url 'detail' otdel.otchot_id %}"><button>Вернуться назад</button></a>
+</body>
+</html>

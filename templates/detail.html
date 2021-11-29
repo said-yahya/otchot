@@ -15,25 +15,45 @@
 </head>
 <body>
 <h1 class="title">{{ otchot.name }}</h1>
-
-<ol type="1">
+<div>
     {% for otdel in otdels %}
-        <li>
-            <h4>{{ otdel.title }}</h4>
-        </li>
-       <form method='POST' enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group m-3">
-                <label>Добавить заголовок</label><br>
-                <input type="text" name="zag_title"><br>
-                <label>Текст</label><br>
-                <textarea class="form-control" name="description"></textarea>
-            </div>
-           <input type="submit" value="Сохранить">
-        </form>
+
+    <h3>{{ otdel.title }}</h3>
+    <a href="http://127.0.0.1:8000/delete/otdel/{{otchot.id}}/{{otdel.id}}"><button>Удалить Отдел</button></a>
+    <a href="{% url 'edit-otdel' otdel.id %}"><button>Изменить название отдела</button></a>
+        {% for zag in list_x %}
+            {% if otdel.id == zag.otdel_id %}
+                <ul style="line-height:200%" >
+                    <li>
+                        <h4>{{ zag.title }}</h4>
+                        <a href="http://127.0.0.1:8000/delete/zagolovok/{{otchot.id}}/{{zag.id}}"><span><button>Удалить Заголовок</button></span></a>
+                    </li>
+                        <p>{{ zag.text }}</p>
+                            {% for image in image_list %}
+                                {% if  zag.id == image.zagolovok_id %}
+                                    <img src="/{{ image.image }}" width="600" height="300">
+                                {% endif %}
+                            {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+        <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+               <input type="hidden" name="otdel_id" value="{{ otdel.id }}">
+                <div class="form-group m-3">
+                    <label>Добавить заголовок</label><br>
+                    <input type="text" name="zag_title"><br>
+                    <label>Текст</label><br>
+                    <textarea class="form-control" name="description"></textarea><br>
+                    <label>Загразить картинку</label><br>
+                    <input name="images" type="file" multiple class="form-control-file"><br>
+                    <p><input type="submit" value="Сохранить"></p>
+                </div>
+
+            </form>
     {% endfor %}
-</ol>
-<h3></h3>
+</div>
+
 <form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group m-3">
@@ -42,5 +62,6 @@
     </div>
     <button type='submit' class="btn btn-primary m-3">Сохранить</button>
 </form>
+<a href="{% url 'reports' %}"><button class="btn btn-primary m-3">Вернуться назад</button></a>
 </body>
 </html>

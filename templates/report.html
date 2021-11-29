@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Мои отчеты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <style>
         .title{
             color:black;
@@ -13,13 +15,15 @@
 </head>
 <body>
 <h1 class="title">Существующие отчеты</h1>
-<ul>
+<ul >
     {% for otchot in otchoti %}
             <li>
-                <a href="{% url 'detail' otchot.id %}" style="text-decoration: none;font-size:20px">{{ otchot.name }}</a>
-
+                <a href="{% url 'otchot' otchot.id %}" style="text-decoration: none;font-size:20px;color: black">{{ otchot.name }}</a>
+                <a href="{% url 'detail' otchot.id %}"><span><button>Внести измения</button></span></a>
             </li>
     {% endfor %}
+
 </ul>
+<a href="{% url 'home' %}"><button class="btn btn-primary m-3">Главная страница</button></a>
 </body>
 </html>

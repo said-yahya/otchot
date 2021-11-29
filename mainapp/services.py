@@ -47,13 +47,41 @@ def get_otdels(id):
 def get_zagolovok(id):
     with connection.cursor() as cursor:
         cursor.execute(f"""
-            select * from mainapp_zagolovok as zagolovok
-            inner join mainapp_description as description
-            on zagolovok.id = description.zagolovok_id
-            inner join mainapp_images as image
-            on zagolovok.id = image.zagolovok_id
-            where zagolovok.otdel_id='{id}'
-              
+            select zag.id as id,zag.title as title,des.text as text,des.zagolovok_id as zagolovok_id,
+            zag.otdel_id as otdel_id from mainapp_zagolovok as zag
+            inner join mainapp_description as des
+            on zag.id = des.zagolovok_id
+            where zag.otdel_id='{id}'        
+        """)
+        data = dictfetchall(cursor)
+    return data
+
+
+def get_otdel_id(id):
+    with connection.cursor() as cursor:
+        cursor.execute(f"""
+            select id from mainapp_otdel
+            where otchot_id = '{id}'      
+        """)
+        data = dictfetchall(cursor)
+    return data
+
+
+def get_zag_id(id):
+    with connection.cursor() as cursor:
+        cursor.execute(f"""
+            select id from mainapp_zagolovok
+            where otdel_id='{id}'      
+        """)
+        data = dictfetchall(cursor)
+    return data
+
+
+def get_images(id):
+    with connection.cursor() as cursor:
+        cursor.execute(f"""
+            select * from mainapp_images
+            where zagolovok_id='{id}'      
         """)
         data = dictfetchall(cursor)
     return data

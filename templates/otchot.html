@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои отчеты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        .title{
+            color:black;
+            font-size: 40px;
+            text-align:center;
+       }
+    </style>
+</head>
+<body>
+<h1 class="title">{{ otchot.name }}</h1>
+<div>
+    {% for otdel in otdels %}
+    <h3>{{ otdel.title }}</h3>
+        {% for zag in list_x %}
+            {% if otdel.id == zag.otdel_id %}
+                <ul style="line-height:200%" >
+                    <li>
+                        <h4>{{ zag.title }}</h4>
+                    </li>
+                        <p>{{ zag.text }}</p>
+                            {% for image in image_list %}
+                                {% if  zag.id == image.zagolovok_id %}
+                                    <img src="/{{ image.image }}" width="600" height="300">
+                                {% endif %}
+                            {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+<a href="{% url 'reports' %}"><button class="btn btn-primary m-3">Вернуться назад</button></a>
+<a href="{% url 'reports' %}"><button class="btn btn-primary m-3">Скачать в формате PDF</button></a>
+</body>
+</html>
