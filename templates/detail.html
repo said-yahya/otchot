@@ -27,8 +27,13 @@
                     <li>
                         <h4>{{ zag.title }}</h4>
                         <a href="http://127.0.0.1:8000/delete/zagolovok/{{otchot.id}}/{{zag.id}}"><span><button>Удалить Заголовок</button></span></a>
+                        <a href="{% url 'edit-zagolovok' otdel_id=otdel.id zagolovok_id=zag.id %}"><button>Изменить заголовок</button></a>
                     </li>
-                        <p>{{ zag.text }}</p>
+                            {% for description in description_list %}
+                                {% if  zag.id == description.zagolovok_id %}
+                                    <p>{{ description.text }}</p>
+                                {% endif %}
+                            {% endfor %}
                             {% for image in image_list %}
                                 {% if  zag.id == image.zagolovok_id %}
                                     <img src="/{{ image.image }}" width="600" height="300">

@@ -47,11 +47,8 @@ def get_otdels(id):
 def get_zagolovok(id):
     with connection.cursor() as cursor:
         cursor.execute(f"""
-            select zag.id as id,zag.title as title,des.text as text,des.zagolovok_id as zagolovok_id,
-            zag.otdel_id as otdel_id from mainapp_zagolovok as zag
-            inner join mainapp_description as des
-            on zag.id = des.zagolovok_id
-            where zag.otdel_id='{id}'        
+            select * from mainapp_zagolovok as zag
+            where otdel_id='{id}'        
         """)
         data = dictfetchall(cursor)
     return data
@@ -72,6 +69,16 @@ def get_zag_id(id):
         cursor.execute(f"""
             select id from mainapp_zagolovok
             where otdel_id='{id}'      
+        """)
+        data = dictfetchall(cursor)
+    return data
+
+
+def get_descriptions(id):
+    with connection.cursor() as cursor:
+        cursor.execute(f"""
+            select * from mainapp_description
+            where zagolovok_id='{id}'      
         """)
         data = dictfetchall(cursor)
     return data

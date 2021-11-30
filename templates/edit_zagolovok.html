@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои отчеты</title>
+</head>
+<body>
+<h1>Вы можете изменить Заголовок</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>Название Заголовка:</label>
+    <textarea  name="zagolovok_title" rows="1" cols="40">{{ zagolovok.title }}</textarea>
+    <br><br>
+    {% for description in description_list %}
+        {% if description.zagolovok_id == zagolovok.id %}
+            <label>Текст:</label>
+            <textarea  name="new_description" rows="2" cols="150">{{ description.text }}</textarea>
+            <br><br>
+        {% endif %}
+    {% endfor %}
+      <input type="submit" value="Изменить">
+</form>
+<a href="{% url 'detail' otdel.otchot_id %}"><button>Вернуться назад</button></a>
+</body>
+</html>

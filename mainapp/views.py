@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .models import Otchot, Otdel, Zagolovok, Description, Images
-from .services import get_otchot, get_otchot_all, get_otdels, get_zagolovok, get_otdel_id, get_zag_id, get_images
+from .services import get_otchot, get_otchot_all, get_otdels, get_zagolovok,\
+    get_otdel_id, get_zag_id, get_images, get_descriptions
+from django.template.loader import get_template
+import pdfkit
 # Create your views here.
 
 
@@ -49,19 +52,20 @@ def detail(request, id):
     list_x = []
     zag_id = []
     image_list = []
+    description_list = []
     for i in get_id:
         x = i['id']
         list_x.extend(get_zagolovok(x))
         zag_id.extend(get_zag_id(x))
     for j in zag_id:
         image_list.extend(get_images(j['id']))
-    print('/????????????', list_x)
-    print('^^^^^^^^^^^^^^^^^^^^', image_list)
+        description_list.extend(get_descriptions(j['id']))
     ctx = {
         'otchot': otchot_info,
         'otdels': otdels,
         'list_x': list_x,
-        'image_list': image_list
+        'image_list': image_list,
+        'description_list': description_list
     }
     return render(request, 'detail.html', ctx)
 
@@ -88,17 +92,20 @@ def otchot(request, otchot_id):
     list_x = []
     zag_id = []
     image_list = []
+    description_list = []
     for i in get_id:
         x = i['id']
         list_x.extend(get_zagolovok(x))
         zag_id.extend(get_zag_id(x))
     for j in zag_id:
         image_list.extend(get_images(j['id']))
+        description_list.extend(get_descriptions(j['id']))
     ctx = {
         'otchot': otchot_info,
         'otdels': otdels,
         'list_x': list_x,
-        'image_list': image_list
+        'image_list': image_list,
+        'description_list': description_list
     }
     return render(request, 'otchot.html', ctx)
 
@@ -110,9 +117,64 @@ def edit_otdel(request, otdel_id):
         if data.get('otdel_title'):
             otdel.title = data['otdel_title']
             otdel.save()
+        return redirect(f"http://127.0.0.1:8000/detail/{otdel.otchot_id}/")
     ctx = {
         'otdel': otdel
     }
     return render(request, 'edit_otdel.html', ctx)
 
 
+def edit_zagolovok(request, zagolovok_id, otdel_id):
+    otdel = Otdel.objects.get(id=otdel_id)
+    zagolovok = Zagolovok.objects.get(id=zagolovok_id)
+    if request.POST:
+        data = request.POST
+        if data.get('zagolovok_title'):
+            zagolovok.title = data['zagolovok_title']
+            zagolovok.save()
+        if data.get('new_description'):
+            description = Description.objects.get(zagolovok_id=zagolovok_id)
+            description.text = data['new_description']
+            description.save()
+        return redirect(f"http://127.0.0.1:8000/detail/{otdel.otchot_id}/")
+    description_list = []
+    zag_id = get_zag_id(otdel_id)
+    for i in zag_id:
+        description_list.extend(get_descriptions(i['id']))
+    ctx = {
+        'otdel': otdel,
+        'description_list': description_list,
+        'zagolovok': zagolovok
+    }
+    return render(request, 'edit_zagolovok.html', ctx)
+
+
+def html_pdf(request, otchot_id):
+    otdels = get_otdels(otchot_id)
+    otchot_info = get_otchot(otchot_id)
+    get_id = get_otdel_id(otchot_id)
+    list_x = []
+    zag_id = []
+    image_list = []
+    description_list = []
+    for i in get_id:
+        x = i['id']
+        list_x.extend(get_zagolovok(x))
+        zag_id.extend(get_zag_id(x))
+    for j in zag_id:
+        image_list.extend(get_images(j['id']))
+        description_list.extend(get_descriptions(j['id']))
+    ctx = {
+        'otchot': otchot_info,
+        'otdels': otdels,
+        'list_x': list_x,
+        'image_list': image_list,
+        'description_list': description_list
+    }
+    template = get_template('otchot_to_PDF.html')
+    html = template.render(ctx)
+    pdf = pdfkit.from_string(html, output_path=False)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="otchot_%s.pdf"' % otchot_info['name']
+    response.write(pdf)
+    return response

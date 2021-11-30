@@ -9,17 +9,7 @@ class OtchotForm(forms.ModelForm):
 
 
 class OtdelForm(forms.ModelForm):
-    class Meta:
-        model = Otdel
-        fields = ['title']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def save(self, otchot, commit=True):
-        self.instance.otchot = otchot
-        super().save()
-        return self.instance
+    title = forms.CharField(label='Название отдела', max_length=100)
 
 
 class ZagolovokForm(forms.ModelForm):

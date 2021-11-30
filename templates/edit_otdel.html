@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Мои отчеты</title>
 </head>
 <body>
 <h1>Вы можете изменить название Отдела</h1>
-<form action="#" method="post">
+<form method="post">
     {% csrf_token %}
     <label>Название отдела:</label>
-    <textarea  name="otdel_title" rows="1">
-        {{ otdel.title }}
-      </textarea>
+    <textarea  name="otdel_title" rows="1" cols="40">{{ otdel.title }}</textarea>
       <br><br>
       <input type="submit" value="Изменить">
 </form>
