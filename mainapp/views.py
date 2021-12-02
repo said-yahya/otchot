@@ -3,6 +3,7 @@ from .models import Otchot, Otdel, Zagolovok, Description, Images
 from .services import get_otchot, get_otchot_all, get_otdels, get_zagolovok,\
     get_otdel_id, get_zag_id, get_images, get_descriptions
 from django.template.loader import get_template
+# noinspection PyUnresolvedReferences
 import pdfkit
 # Create your views here.
 
@@ -14,7 +15,7 @@ def index(request):
 def new(request):
     if request.POST:
         data = request.POST
-        if data['otchot_name'] != '':
+        if data.get('otchot_name'):
             otchot, create = Otchot.objects.get_or_create(name=data['otchot_name'])
         return redirect(f'/detail/{otchot.id}/')
     ctx = {}
@@ -175,6 +176,6 @@ def html_pdf(request, otchot_id):
     html = template.render(ctx)
     pdf = pdfkit.from_string(html, output_path=False)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="otchot_%s.pdf"' % otchot_info['name']
+    response['Content-Disposition'] = f'attachment; filename="otchot.pdf"'
     response.write(pdf)
     return response
