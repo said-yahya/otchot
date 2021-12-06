@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Otchot, Otdel, Zagolovok, Description, Images
+from .models import Otchot, Otdel, Zagolovok, Description, Images, Default
 from .services import get_otchot, get_otchot_all, get_otdels, get_zagolovok,\
     get_otdel_id, get_zag_id, get_images, get_descriptions
 from django.template.loader import get_template
@@ -16,9 +16,14 @@ def new(request):
     if request.POST:
         data = request.POST
         if data.get('otchot_name'):
-            otchot, create = Otchot.objects.get_or_create(name=data['otchot_name'])
+            otchot, create = Otchot.objects.get_or_create(
+                name=data['otchot_name'],
+                company=data['company'],
+                client=data['client'],
+                order=data['order'])
         return redirect(f'/detail/{otchot.id}/')
-    ctx = {}
+    default = Default.objects.get()
+    ctx = {'default': default}
     return render(request, 'add.html', ctx)
 
 
@@ -86,6 +91,11 @@ def delete_otdel(request, otchot_id, otdel_id):
     return redirect(f'http://127.0.0.1:8000/detail/{otchot_id}/')
 
 
+def delete_image(request, otdel_id, zagolovok_id, image_id):
+    Images.objects.get(id=image_id).delete()
+    return redirect(f"http://127.0.0.1:8000/edit/zagolovok/{otdel_id}/{zagolovok_id}")
+
+
 def otchot(request, otchot_id):
     otdels = get_otdels(otchot_id)
     otchot_info = get_otchot(otchot_id)
@@ -130,22 +140,28 @@ def edit_zagolovok(request, zagolovok_id, otdel_id):
     zagolovok = Zagolovok.objects.get(id=zagolovok_id)
     if request.POST:
         data = request.POST
+        print('^^^^^^^^^^^', data)
         if data.get('zagolovok_title'):
             zagolovok.title = data['zagolovok_title']
             zagolovok.save()
-        if data.get('new_description'):
-            description = Description.objects.get(zagolovok_id=zagolovok_id)
-            description.text = data['new_description']
-            description.save()
-        return redirect(f"http://127.0.0.1:8000/detail/{otdel.otchot_id}/")
-    description_list = []
-    zag_id = get_zag_id(otdel_id)
-    for i in zag_id:
-        description_list.extend(get_descriptions(i['id']))
+            if data.get('new_description'):
+                description = Description.objects.get(zagolovok_id=zagolovok_id)
+                description.text = data['new_description']
+                description.save()
+            return redirect(f"http://127.0.0.1:8000/detail/{otdel.otchot_id}/")
+        if data.get('images'):
+            images = request.POST.getlist('images')
+            print('###########', images)
+            for image in images:
+                create = Images.objects.create(image=f'static/img/{image}', zagolovok=zagolovok)
+            return redirect(f"http://127.0.0.1:8000/edit/zagolovok/{otdel_id}/{zagolovok_id}")
+    images = get_images(zagolovok_id)
+    description_list = get_descriptions(zagolovok_id)
     ctx = {
         'otdel': otdel,
         'description_list': description_list,
-        'zagolovok': zagolovok
+        'zagolovok': zagolovok,
+        'images': images
     }
     return render(request, 'edit_zagolovok.html', ctx)
 
@@ -176,6 +192,6 @@ def html_pdf(request, otchot_id):
     html = template.render(ctx)
     pdf = pdfkit.from_string(html, output_path=False)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="otchot.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Otchot.pdf" '
     response.write(pdf)
     return response

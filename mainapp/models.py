@@ -17,6 +17,9 @@ def slugify(s):
 class Otchot(models.Model):
 
     name = models.CharField(max_length=255)
+    client = models.CharField(max_length=255, default='Заказчик')
+    company = models.CharField(max_length=255, default='Исполнитель')
+    order = models.TextField(default='Заказ')
     slug = models.SlugField()
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -62,3 +65,10 @@ class Images(models.Model):
     zagolovok = models.ForeignKey(Zagolovok, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='static/img/')
     created_date = models.DateTimeField(auto_now_add=True)
+
+
+class Default(models.Model):
+
+    company_name = models.CharField(max_length=255)
+    client = models.CharField(max_length=255)
+    order = models.TextField()

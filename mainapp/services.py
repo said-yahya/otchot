@@ -92,3 +92,5 @@ def get_images(id):
         """)
         data = dictfetchall(cursor)
     return data
+
+

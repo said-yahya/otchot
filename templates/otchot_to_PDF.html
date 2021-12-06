@@ -8,38 +8,75 @@
     <style>
         .title{
             color:black;
-            font-size: 40px;
+            font-size: 50px;
             text-align:center;
+       }
+       .first-page {
+            margin: 20px 0px 20px 0px;
+            background-color:white;
+            text-align:left;
+            font-size: 25px;
+            line-height:400%
+       }
+       .time{text-align: center}
+       .order{line-height: 200%}
+
+       .container{
+            max-weight: 1000px ;
+            margin: auto;
+            background-color: white;
+       }
+       .zagolovok{
+            margin: 20px;
+            background: fff;
+            padding: 15px;
+       }
+       .zag-img{
+            width: 800px;
+            margin: 20px 200px 20px 150px;
+            border: 1px solid grey;
+            align: center;
        }
     </style>
 </head>
 <body>
-<h1 class="title">{{ otchot.name }}</h1>
-<div>
-    {% for otdel in otdels %}
-    <h3>{{ otdel.title }}</h3>
-        {% for zag in list_x %}
-            {% if otdel.id == zag.otdel_id %}
-                <ul style="line-height:200%" >
-                    <li>
-                        <h4>{{ zag.title }}</h4>
-                    </li>
+    <div class="container">
+            <div class="first-page">
+                <h1 class="title">{{ otchot.name }}</h1>
+                <p>Клиент: {{ otchot.client }}</p>
+                <p>Исполнитель: {{ otchot.company }}</p>
+                <p class="order">Заказ: {{ otchot.order }}</p>
+                <p class="time">{{ otchot.created_date|date:"d-m-Y" }}</p>
+                <hr>
+            </div>
+            <div class="otdel">
+                {% for otdel in otdels %}
+                <h3>{{ otdel.title }}</h3>
+                    {% for zag in list_x %}
+                        {% if otdel.id == zag.otdel_id %}
+                        <div class="zagolovok">
+                            <ul style="line-height:200%" >
+                                <li>
+                                    <h4>{{ zag.title }}</h4>
+                                </li>
+                                    {% for description in description_list %}
+                                        {% if  zag.id == description.zagolovok_id %}
+                                            <p>{{ description.text }}</p>
+                                        {% endif %}
+                                    {% endfor %}
 
-                            {% for description in description_list %}
-                                {% if  zag.id == description.zagolovok_id %}
-                                    <p>{{ description.text }}</p>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% for image in image_list %}
-                                {% if  zag.id == image.zagolovok_id %}
-                                    <img src="/{{ image.image }}" width="600" height="300">
-                                {% endif %}
-                            {% endfor %}
-                </ul>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-</div>
+                                    {% for image in image_list %}
+                                        {% if  zag.id == image.zagolovok_id %}
+                                            <img class="zag-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzrtaXGkXhkLIV4Du-Lg0JPJ5I84RQb8RvIA&usqp=CAU">
+                                        {% endif %}
+                                    {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                 <hr>
+                {% endfor %}
+            </div>
+    </div>
 </body>
 </html>

@@ -12,7 +12,13 @@
     {% csrf_token %}
     <div class="form-group m-3">
         <label>Название отчета</label>
-        <input required name="otchot_name" type="text" placeholder="Введите название" class="form-control">
+        <input required name="otchot_name" type="text" placeholder="Введите название" class="form-control"><br>
+        <label>Исполнитель:</label><br>
+        <textarea name="company" rows="1" cols="40">{{ default.company_name }}</textarea><br>
+        <br><label>Заказчик:</label><br>
+        <textarea name="client" rows="1" cols="40">{{ default.client }}</textarea><br>
+        <br><label>Заказ:</label><br>
+        <textarea name="order" rows="2" cols="100">{{ default.order }}</textarea>
     </div>
     <button type='submit' class="btn btn-primary m-3">Сохранить</button>
 </form>

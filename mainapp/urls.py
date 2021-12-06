@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import index, new, reports, detail, delete_zogolovok, delete_otchot, delete_otdel, otchot,\
-    edit_otdel, edit_zagolovok, html_pdf
+    edit_otdel, edit_zagolovok, html_pdf, delete_image
 
 urlpatterns = [
     path('', index, name='home'),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('delete/otchot/<int:otchot_id>', delete_otchot, name='delete-otchot'),
     path('delete/otdel/<int:otchot_id>/<int:otdel_id>', delete_otdel, name='delete-otdel'),
     path('delete/zagolovok/<int:otchot_id>/<int:zagolovok_id>', delete_zogolovok, name='delete-zagolovok'),
+    path('delete-image/<int:otdel_id>/<int:zagolovok_id>/<int:image_id>', delete_image, name='delete-image'),
     path('otchot/<int:otchot_id>', otchot, name='otchot'),
     path('edit/otdel/<int:otdel_id>', edit_otdel, name='edit-otdel'),
     path('edit/zagolovok/<int:otdel_id>/<int:zagolovok_id>', edit_zagolovok, name='edit-zagolovok'),
