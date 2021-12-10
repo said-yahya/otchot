@@ -67,7 +67,7 @@
 
                                     {% for image in image_list %}
                                         {% if  zag.id == image.zagolovok_id %}
-                                            <img class="zag-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzrtaXGkXhkLIV4Du-Lg0JPJ5I84RQb8RvIA&usqp=CAU">
+                                            <img class="zag-img" src="{{ image.image }}">
                                         {% endif %}
                                     {% endfor %}
                             </ul>
